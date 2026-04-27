@@ -6,38 +6,37 @@ use Illuminate\Http\JsonResponse;
 
 abstract class Controller
 {
-    /**
-     * success response method.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function sendResponse($result, $message, $code = 200): JsonResponse
+    use \App\Traits\ApiResponse;
+
+    protected function resourceCollection($paginator, $resource)
     {
-        $response = [
-            'success' => true,
-            'data'    => $result,
-            'message' => $message,
-        ];
-
-        return response()->json($response, $code);
-    }
-
-    /**
-     * return error response.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function sendError($error, $errorMessages = [], $code = 404): JsonResponse
-    {
-        $response = [
-            'success' => false,
-            'message' => $error,
-        ];
-
-        if (!empty($errorMessages)) {
-            $response['data'] = $errorMessages;
+        if ($paginator->total() > $paginator->perPage()) {
+            $data = [
+                'records' => $resource::collection($paginator),
+                'paginationLinks' => [
+                    'currentPage' => $paginator->currentPage(),
+                    'lastPage'    => $paginator->lastPage(),
+                    'perPage'     => $paginator->perPage(),
+                    'total'       => $paginator->total(),
+                    'links'       => [
+                        'first'       => $paginator->url(1),
+                        'last'        => $paginator->url($paginator->lastPage()),
+                        'next'        => $paginator->nextPageUrl(),
+                        'previous'    => $paginator->previousPageUrl(),
+                    ]
+                ]
+            ];
+        } elseif ($paginator->total() == 0) {
+            $data = [
+                'records' => [],
+                'paginationLinks' => null
+            ];
+        } else {
+            $data = [
+                'records' => $resource::collection($paginator),
+                'paginationLinks' => null
+            ];
         }
-
-        return response()->json($response, $code);
+        return $data;
     }
 }

@@ -7,16 +7,18 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, HasUuids;
+    use HasApiTokens, HasFactory, Notifiable, HasUuids, HasRoles;
 
     protected $fillable = [
         'name',
         'email',
         'password',
         'role',
+        'phone',
     ];
 
     protected $hidden = [
@@ -32,13 +34,18 @@ class User extends Authenticatable
         ];
     }
 
-    public function isAdmin(): bool
+    public function isSuperAdmin(): bool
     {
-        return $this->role === 'admin';
+        return $this->role == 'super_admin';
     }
 
-    public function isSeller(): bool
+    public function isAdmin(): bool
     {
-        return $this->role === 'seller';
+        return $this->role == 'admin';
+    }
+
+    public function image()
+    {
+        return $this->morphOne(Image::class, 'imageable');
     }
 }

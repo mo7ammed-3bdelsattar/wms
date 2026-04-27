@@ -82,7 +82,7 @@
                                 </a>
                             </span>
                         </li>
-                        <li class="flex items-center gap-4 py-2 relative before:border-l before:border-[#e3e3e0] dark:before:border-[#3E3E3A] before:bottom-1/2 before:top-0 before:left-[0.4rem] before:absolute">
+                        <li class="flex items-center gap-4 py-2 relative before:border-l before:border-[#e3e3e0] dark:before:border-[#3E3E3A] before:bottom-0 before:top-0 before:left-[0.4rem] before:absolute">
                             <span class="relative py-1 bg-white dark:bg-[#161615]">
                                 <span class="flex items-center justify-center rounded-full bg-[#FDFDFC] dark:bg-[#161615] shadow-[0px_0px_1px_0px_rgba(0,0,0,0.03),0px_1px_2px_0px_rgba(0,0,0,0.06)] w-3.5 h-3.5 border dark:border-[#3E3E3A] border-[#e3e3e0]">
                                     <span class="rounded-full bg-[#dbdbd7] dark:bg-[#3E3E3A] w-1.5 h-1.5"></span>
@@ -108,6 +108,22 @@
                                     </svg>
                                 </a>
                             </span>
+                        </li>
+                        <li class="flex items-start gap-4 py-2 relative before:border-l before:border-[#e3e3e0] dark:before:border-[#3E3E3A] before:bottom-1/2 before:top-0 before:left-[0.4rem] before:absolute">
+                            <span class="relative py-1 bg-white dark:bg-[#161615]">
+                                <span class="flex items-center justify-center rounded-full bg-[#FDFDFC] dark:bg-[#161615] shadow-[0px_0px_1px_0px_rgba(0,0,0,0.03),0px_1px_2px_0px_rgba(0,0,0,0.06)] w-3.5 h-3.5 border dark:border-[#3E3E3A] border-[#e3e3e0]">
+                                    <span class="rounded-full bg-[#dbdbd7] dark:bg-[#3E3E3A] w-1.5 h-1.5"></span>
+                                </span>
+                            </span>
+                            <div class="flex flex-col gap-2 w-full">
+                                <span>Download API Collection:</span>
+                                <div class="flex items-center gap-2">
+                                    <input type="text" value="{{ route('download.collection') }}" readonly class="flex-1 px-3 py-1.5 text-[11px] border border-gray-200 dark:border-[#3E3E3A] rounded bg-[#FDFDFC] dark:bg-[#0a0a0a] text-[#706f6c] dark:text-[#A1A09A] outline-none">
+                                    <a href="{{ route('download.collection') }}" class="px-3 py-1.5 bg-[#f53003] dark:bg-[#FF4433] text-white rounded font-medium text-[11px] hover:opacity-90 transition-opacity whitespace-nowrap">
+                                        Download
+                                    </a>
+                                </div>
+                            </div>
                         </li>
                     </ul>
                     <ul class="flex gap-3 text-sm leading-normal">

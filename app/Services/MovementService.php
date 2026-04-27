@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\Models\MovementOrder;
-use App\Models\ProductWarehouse;
+use App\Models\Product;
 use Illuminate\Support\Facades\DB;
 
 class MovementService
@@ -19,47 +19,35 @@ class MovementService
         DB::transaction(function () use ($order, $typeSlug) {
             foreach ($order->items as $item) {
                 switch ($typeSlug) {
+                    case 'in':
                     case 'purchase':
-                        $this->increaseStock($item->product_id, $order->warehouse_id, $item->quantity);
-                        break;
-                    case 'sale':
-                        $this->decreaseStock($item->product_id, $order->warehouse_id, $item->quantity);
-                        break;
-                    case 'transfer':
-                        $this->decreaseStock($item->product_id, $order->warehouse_id, $item->quantity);
-                        $this->increaseStock($item->product_id, $order->to_warehouse_id, $item->quantity);
-                        break;
                     case 'adjustment-in':
-                        $this->increaseStock($item->product_id, $order->warehouse_id, $item->quantity);
+                        $this->increaseStock($item->product_id, $item->quantity);
                         break;
+                    case 'out':
+                    case 'sale':
                     case 'adjustment-out':
-                        $this->decreaseStock($item->product_id, $order->warehouse_id, $item->quantity);
+                        $this->decreaseStock($item->product_id, $item->quantity);
                         break;
                 }
             }
         });
     }
 
-    private function increaseStock($productId, $warehouseId, $quantity)
+    private function increaseStock($productId, $quantity)
     {
-        $stock = ProductWarehouse::firstOrCreate(
-            ['product_id' => $productId, 'warehouse_id' => $warehouseId],
-            ['quantity' => 0]
-        );
-
-        $stock->increment('quantity', $quantity);
+        $product = Product::findOrFail($productId);
+        $product->increment('quantity', $quantity);
     }
 
-    private function decreaseStock($productId, $warehouseId, $quantity)
+    private function decreaseStock($productId, $quantity)
     {
-        $stock = ProductWarehouse::where('product_id', $productId)
-            ->where('warehouse_id', $warehouseId)
-            ->first();
+        $product = Product::findOrFail($productId);
 
-        if (!$stock || $stock->quantity < $quantity) {
-            throw new \Exception("Insufficient stock for product ID: {$productId} in warehouse ID: {$warehouseId}");
+        if ($product->quantity < $quantity) {
+            throw new \Exception("Insufficient stock for product: {$product->name}");
         }
 
-        $stock->decrement('quantity', $quantity);
+        $product->decrement('quantity', $quantity);
     }
 }

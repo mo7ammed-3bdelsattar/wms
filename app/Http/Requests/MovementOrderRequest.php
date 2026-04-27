@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Requests\BaseFormRequest;
 
-class MovementOrderRequest extends FormRequest
+class MovementOrderRequest extends BaseFormRequest
 {
     public function authorize(): bool
     {
@@ -15,11 +15,9 @@ class MovementOrderRequest extends FormRequest
     {
         return [
             'movement_type_id' => 'required|exists:movement_types,id',
-            'warehouse_id' => 'required|exists:warehouses,id',
-            'to_warehouse_id' => 'nullable|exists:warehouses,id',
-            'supplier_id' => 'nullable|exists:suppliers,id',
-            'buyer_id' => 'nullable|exists:users,id',
-            'seller_id' => 'nullable|exists:users,id',
+            'supplier_id' => 'nullable|exists:partners,id',
+            'buyer_id' => 'nullable|exists:partners,id',
+            'seller_id' => 'nullable|exists:partners,id',
             'reason_id' => 'nullable|exists:reasons,id',
             'notes' => 'nullable|string',
             'items' => 'required|array|min:1',

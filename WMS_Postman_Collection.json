@@ -1,0 +1,1851 @@
+{
+  "info": {
+    "_postman_id": "8b16171f-923d-4502-a7a1-fac352951075",
+    "name": "WMS API",
+    "description": "API Collection for the Warehouse Management System",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "40341776",
+    "_collection_link": "https://go.postman.co/collection/40341776-8b16171f-923d-4502-a7a1-fac352951075?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if(pm.response.code === 200) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.environment.set(\"token\", jsonData.data.token);",
+                  "    pm.collectionVariables.set(\"token\", jsonData.data.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"super@admin.com\",\n    \"password\": \"password\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "login"
+              ]
+            },
+            "description": "Authenticates an admin user and retrieves an access token.\n**Body Format:** JSON\n- `email` (string, required): Admin's email address.\n- `password` (string, required): Admin's password."
+          },
+          "response": [
+            {
+              "name": "Login Example",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"email\": \"super@admin.com\",\n    \"password\": \"password\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/login",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "login"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Host",
+                  "value": "localhost:8000"
+                },
+                {
+                  "key": "Connection",
+                  "value": "close"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "PHP/8.3.30"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "Date",
+                  "value": "Mon, 27 Apr 2026 23:15:44 GMT"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"status\": 200,\n    \"message\": \"User logged in successfully.\",\n    \"data\": {\n        \"user\": {\n            \"id\": \"019dd047-bb75-72e6-adb0-e045cdfb7eca\",\n            \"name\": \"Updated Name\",\n            \"email\": \"super@admin.com\",\n            \"role\": \"super_admin\",\n            \"avatar\": \"http://localhost:8000/storage/users/uoPrC2z2pvGII9aHnSS1RmJcPRLxlmZzkZCLZGx1.jpg\"\n        },\n        \"access_token\": \"3|BnK7mD5gf3soHJxl2kwyaOgJRFaIvKuyEMak4Kshdfce5a07\",\n        \"token_type\": \"Bearer\"\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/logout",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "logout"
+              ]
+            },
+            "description": "Revokes the current access token and logs the user out."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Profile",
+      "item": [
+        {
+          "name": "Profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/profile",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "profile"
+              ]
+            },
+            "description": "Retrieves the authenticated user's profile information."
+          },
+          "response": [
+            {
+              "name": "Profile Example",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/profile",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "profile"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Host",
+                  "value": "localhost:8000"
+                },
+                {
+                  "key": "Connection",
+                  "value": "close"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "PHP/8.3.30"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "Date",
+                  "value": "Mon, 27 Apr 2026 23:14:56 GMT"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"status\": 200,\n    \"message\": \"User profile retrieved successfully.\",\n    \"data\": {\n        \"id\": \"019dd047-bb75-72e6-adb0-e045cdfb7eca\",\n        \"name\": \"Updated Name\",\n        \"email\": \"super@admin.com\",\n        \"role\": \"super_admin\",\n        \"avatar\": \"http://localhost:8000/storage/users/uoPrC2z2pvGII9aHnSS1RmJcPRLxlmZzkZCLZGx1.jpg\"\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Update Profile",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "name",
+                  "value": "Updated Name",
+                  "type": "text"
+                },
+                {
+                  "key": "phone",
+                  "value": "0501234567",
+                  "type": "text"
+                },
+                {
+                  "key": "avatar",
+                  "type": "file",
+                  "src": "/E:/mohammed/photos/WhatsApp Image 2026-04-26 at 3.06.45 PM.jpeg"
+                },
+                {
+                  "key": "_method",
+                  "value": "PATCH",
+                  "type": "text",
+                  "uuid": "7ccb5b5d-eb26-43b4-a263-27ac67e70a17"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/profile",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "profile"
+              ]
+            },
+            "description": "Updates the authenticated user's profile information.  \n**Body Format:** multipart/form-data\n\n- `name` (string, optional): User's full name.\n    \n- `phone` (string, optional): Contact phone number.\n    \n- avatar (file, optional): Profile image file (jpeg, png, jpg, gif, max 2MB)."
+          },
+          "response": [
+            {
+              "name": "Update Profile Example",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "name",
+                      "value": "Updated Name",
+                      "type": "text"
+                    },
+                    {
+                      "key": "phone",
+                      "value": "0501234567",
+                      "type": "text"
+                    },
+                    {
+                      "key": "avatar",
+                      "type": "file",
+                      "src": "/E:/mohammed/photos/WhatsApp Image 2026-04-26 at 3.06.45 PM.jpeg"
+                    },
+                    {
+                      "key": "_method",
+                      "value": "PATCH",
+                      "type": "text",
+                      "uuid": "7ccb5b5d-eb26-43b4-a263-27ac67e70a17"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{base_url}}/profile",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "profile"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Host",
+                  "value": "localhost:8000"
+                },
+                {
+                  "key": "Connection",
+                  "value": "close"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "PHP/8.3.30"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "Date",
+                  "value": "Mon, 27 Apr 2026 23:24:09 GMT"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"status\": 200,\n    \"message\": \"Profile updated successfully.\",\n    \"data\": {\n        \"id\": \"019dd047-bb75-72e6-adb0-e045cdfb7eca\",\n        \"name\": \"Updated Name\",\n        \"email\": \"super@admin.com\",\n        \"role\": \"super_admin\",\n        \"avatar\": \"http://localhost:8000/storage/users/f9qDsBltkUGKSmaOIE0lCP2shvZgaok6yhh30tEK.jpg\"\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Delete Avatar",
+          "protocolProfileBehavior": {
+            "disabledSystemHeaders": {
+              "accept": true
+            }
+          },
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/profile/delete-avatar",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "profile",
+                "delete-avatar"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Categories",
+      "item": [
+        {
+          "name": "List Categories",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/categories",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "categories"
+              ]
+            },
+            "description": "Retrieves a list of all categories along with their product counts."
+          },
+          "response": [
+            {
+              "name": "List Categories Example",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/categories",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "categories"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Host",
+                  "value": "localhost:8000"
+                },
+                {
+                  "key": "Connection",
+                  "value": "close"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "PHP/8.3.30"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "Date",
+                  "value": "Mon, 27 Apr 2026 23:31:21 GMT"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"status\": 200,\n    \"message\": \"Categories retrieved successfully.\",\n    \"data\": [\n        {\n            \"id\": \"019dd047-ba4a-71f3-8114-f8f802afa230\",\n            \"name\": \"Electronics\",\n            \"description\": \"Various electronic devices\",\n            \"products_count\": 11,\n            \"image\": \"http://localhost:8000/uploads/default.png\"\n        },\n        {\n            \"id\": \"019dd047-ba4d-71ed-b8e0-b148ddcd4880\",\n            \"name\": \"Home Appliances\",\n            \"description\": \"Household tools and appliances\",\n            \"products_count\": 10,\n            \"image\": \"http://localhost:8000/uploads/default.png\"\n        },\n        {\n            \"id\": \"019dd047-ba4e-7390-afc1-e1bafbd69cee\",\n            \"name\": \"Spare Parts\",\n            \"description\": \"Car and equipment spare parts\",\n            \"products_count\": 9,\n            \"image\": \"http://localhost:8000/uploads/default.png\"\n        },\n        {\n            \"id\": \"019dd142-ee09-71b2-8e90-f6ce5bef95c9\",\n            \"name\": \"New Category\",\n            \"description\": \"Description here\",\n            \"products_count\": 0,\n            \"image\": \"http://localhost:8000/uploads/default.png\"\n        }\n    ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Create Category",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "name",
+                  "value": "New Category",
+                  "type": "text",
+                  "uuid": "1f40c761-3d46-4aa9-aa98-2ff43407a12a"
+                },
+                {
+                  "key": "description",
+                  "value": "Description here",
+                  "type": "text",
+                  "uuid": "fe4c8fb3-d15e-47e8-9df3-d6b8dc69d923"
+                },
+                {
+                  "key": "image",
+                  "type": "file",
+                  "uuid": "034e3062-911a-414a-b47e-26678bbd788d",
+                  "value": null,
+                  "disabled": true
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/categories",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "categories"
+              ]
+            },
+            "description": "Creates a new category.\n**Body Format:** multipart/form-data\n- `name` (string, required): Name of the category. Must be unique.\n- `description` (string, optional): Detailed description.\n- `image` (file, optional): Category cover image (jpeg, png, jpg, gif, max 2MB)."
+          },
+          "response": [
+            {
+              "name": "Create Category Example",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "name",
+                      "value": "New Category",
+                      "type": "text",
+                      "uuid": "1f40c761-3d46-4aa9-aa98-2ff43407a12a"
+                    },
+                    {
+                      "key": "description",
+                      "value": "Description here",
+                      "type": "text",
+                      "uuid": "fe4c8fb3-d15e-47e8-9df3-d6b8dc69d923"
+                    },
+                    {
+                      "key": "image",
+                      "type": "file",
+                      "uuid": "034e3062-911a-414a-b47e-26678bbd788d",
+                      "value": null,
+                      "disabled": true
+                    }
+                  ],
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/categories",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "categories"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Host",
+                  "value": "localhost:8000"
+                },
+                {
+                  "key": "Connection",
+                  "value": "close"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "PHP/8.3.30"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "Date",
+                  "value": "Mon, 27 Apr 2026 23:25:17 GMT"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"status\": 201,\n    \"message\": \"Category created successfully.\",\n    \"data\": {\n        \"id\": \"019dd142-ee09-71b2-8e90-f6ce5bef95c9\",\n        \"name\": \"New Category\",\n        \"description\": \"Description here\",\n        \"image\": \"http://localhost:8000/uploads/default.png\"\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Category",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/categories/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "categories",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "019dd047-ba4a-71f3-8114-f8f802afa230"
+                }
+              ]
+            },
+            "description": "Retrieves details of a specific category by ID."
+          },
+          "response": [
+            {
+              "name": "Get Category Example",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/categories/:id",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "categories",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "019dd047-ba4a-71f3-8114-f8f802afa230"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Host",
+                  "value": "localhost:8000"
+                },
+                {
+                  "key": "Connection",
+                  "value": "close"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "PHP/8.3.30"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "Date",
+                  "value": "Mon, 27 Apr 2026 23:31:38 GMT"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"status\": 200,\n    \"message\": \"Category retrieved successfully.\",\n    \"data\": {\n        \"id\": \"019dd047-ba4a-71f3-8114-f8f802afa230\",\n        \"name\": \"Electronics\",\n        \"description\": \"Various electronic devices\",\n        \"products_count\": 11,\n        \"image\": \"http://localhost:8000/uploads/default.png\"\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Update Category",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "name",
+                  "value": "Updated Category Name",
+                  "type": "text",
+                  "uuid": "9e0aa824-2dfd-4c46-93a0-5c31a17007eb"
+                },
+                {
+                  "key": "description",
+                  "value": "Updated Category Description",
+                  "type": "text",
+                  "uuid": "7084c0b3-a113-4de0-9804-25d9f397cdac"
+                },
+                {
+                  "key": "image",
+                  "type": "file",
+                  "uuid": "294189b9-59ca-42d8-9074-5ee0ec9e4b53",
+                  "value": null
+                },
+                {
+                  "key": "_method",
+                  "value": "PATCH",
+                  "type": "text",
+                  "uuid": "c73b7d33-c0d4-4ae7-a656-d353e986b481"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/categories/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "categories",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "019dd047-ba4a-71f3-8114-f8f802afa230"
+                }
+              ]
+            },
+            "description": "Updates an existing category. Since file uploads via PUT can be tricky in some clients, you can use POST with `_method=PUT` if uploading files.\n**Body Format:** multipart/form-data\n- `name` (string, required): Category name. Must be unique (ignoring itself).\n- `description` (string, optional): Category description.\n- `image` (file, optional): New image file to replace the old one.\n- `delete_image` (boolean string 'true'/'false', optional): Set to true to delete the current image."
+          },
+          "response": [
+            {
+              "name": "Update Category Example",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "name",
+                      "value": "Updated Category Name",
+                      "type": "text",
+                      "uuid": "9e0aa824-2dfd-4c46-93a0-5c31a17007eb"
+                    },
+                    {
+                      "key": "description",
+                      "value": "Updated Category Description",
+                      "type": "text",
+                      "uuid": "7084c0b3-a113-4de0-9804-25d9f397cdac"
+                    },
+                    {
+                      "key": "image",
+                      "type": "file",
+                      "uuid": "294189b9-59ca-42d8-9074-5ee0ec9e4b53",
+                      "value": null
+                    },
+                    {
+                      "key": "_method",
+                      "value": "PATCH",
+                      "type": "text",
+                      "uuid": "c73b7d33-c0d4-4ae7-a656-d353e986b481"
+                    }
+                  ],
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/categories/:id",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "categories",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "019dd047-ba4a-71f3-8114-f8f802afa230"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Host",
+                  "value": "localhost:8000"
+                },
+                {
+                  "key": "Connection",
+                  "value": "close"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "PHP/8.3.30"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "Date",
+                  "value": "Mon, 27 Apr 2026 23:35:48 GMT"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"status\": 200,\n    \"message\": \"Category updated successfully.\",\n    \"data\": {\n        \"id\": \"019dd047-ba4a-71f3-8114-f8f802afa230\",\n        \"name\": \"Updated Category Name\",\n        \"description\": \"Updated Category Description\",\n        \"image\": \"http://localhost:8000/uploads/default.png\"\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Delete Category",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/categories/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "categories",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "019dd047-ba4a-71f3-8114-f8f802afa230"
+                }
+              ]
+            },
+            "description": "Deletes a category and its associated image from the system."
+          },
+          "response": [
+            {
+              "name": "Delete Category Example",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/categories/:id",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "categories",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "019dd047-ba4a-71f3-8114-f8f802afa230"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "",
+              "header": [
+                {
+                  "key": "Host",
+                  "value": "localhost:8000"
+                },
+                {
+                  "key": "Connection",
+                  "value": "close"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "PHP/8.3.30"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "Date",
+                  "value": "Mon, 27 Apr 2026 23:37:43 GMT"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                }
+              ],
+              "cookie": [
+                {
+                  "expires": "Invalid Date",
+                  "domain": "",
+                  "path": ""
+                }
+              ],
+              "body": "{\n    \"success\": true,\n    \"status\": 200,\n    \"message\": \"Category deleted successfully.\",\n    \"data\": []\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Partners",
+      "item": [
+        {
+          "name": "List Partners",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/partners",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "partners"
+              ],
+              "query": [
+                {
+                  "key": "type",
+                  "value": "supplier",
+                  "description": "Filter by type: seller, buyer, supplier",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Retrieves a list of all partners.\n**Query Parameters:**\n- `type` (string, optional): Filter partners by type. Allowed values: `seller`, `buyer`, `supplier`."
+          },
+          "response": [
+            {
+              "name": "List Partners Example",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/partners",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "partners"
+                  ],
+                  "query": [
+                    {
+                      "key": "type",
+                      "value": "supplier",
+                      "description": "Filter by type: seller, buyer, supplier",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Host",
+                  "value": "localhost:8000"
+                },
+                {
+                  "key": "Connection",
+                  "value": "close"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "PHP/8.3.30"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "Date",
+                  "value": "Mon, 27 Apr 2026 23:42:31 GMT"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"status\": 200,\n    \"message\": \"Partners retrieved successfully.\",\n    \"data\": [\n        {\n            \"id\": \"019dd047-ba6d-72b9-b943-b02662f4d26a\",\n            \"type\": \"supplier\",\n            \"name\": \"First Supplier\",\n            \"contact_name\": \"Ahmed Supplier\",\n            \"contact_email\": \"sup1@example.com\",\n            \"contact_phone\": \"0500000001\",\n            \"address\": \"Riyadh, Olaya St.\"\n        },\n        {\n            \"id\": \"019dd047-ba6f-70c5-be5b-2fca53ff1320\",\n            \"type\": \"supplier\",\n            \"name\": \"Tech Company\",\n            \"contact_name\": \"Khalid Tech\",\n            \"contact_email\": \"sup2@example.com\",\n            \"contact_phone\": \"0500000002\",\n            \"address\": \"Jeddah, Palestine St.\"\n        },\n        {\n            \"id\": \"019dd047-ba70-7142-8871-bac77945160d\",\n            \"type\": \"supplier\",\n            \"name\": \"Global Supplier\",\n            \"contact_name\": \"Omar Global\",\n            \"contact_email\": \"sup3@example.com\",\n            \"contact_phone\": \"0500000003\",\n            \"address\": \"Dammam, Industrial Area\"\n        }\n    ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Create Partner",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"type\": \"buyer\",\n    \"name\": \"Awesome Client\",\n    \"contact_name\": \"John Doe\",\n    \"contact_email\": \"john@awesome.com\",\n    \"contact_phone\": \"1234567890\",\n    \"address\": \"123 Main St\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/partners",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "partners"
+              ]
+            },
+            "description": "Creates a new partner (buyer, seller, or supplier).\n**Body Format:** JSON\n- `type` (string, required): The partner role. Allowed values: `seller`, `buyer`, `supplier`.\n- `name` (string, required): The partner's company or primary name.\n- `contact_name` (string, optional): Name of the contact person.\n- `contact_email` (string, optional): Valid email address.\n- `contact_phone` (string, optional): Phone number.\n- `address` (string, optional): Physical address."
+          },
+          "response": [
+            {
+              "name": "Create Partner Example",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"type\": \"buyer\",\n    \"name\": \"Awesome Client\",\n    \"contact_name\": \"John Doe\",\n    \"contact_email\": \"john@awesome.com\",\n    \"contact_phone\": \"1234567890\",\n    \"address\": \"123 Main St\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/partners",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "partners"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Host",
+                  "value": "localhost:8000"
+                },
+                {
+                  "key": "Connection",
+                  "value": "close"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "PHP/8.3.30"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "Date",
+                  "value": "Mon, 27 Apr 2026 23:43:28 GMT"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"status\": 201,\n    \"message\": \"Partner created successfully.\",\n    \"data\": {\n        \"id\": \"019dd153-94a5-708c-8d82-21eab420e027\",\n        \"type\": \"buyer\",\n        \"name\": \"Awesome Client\",\n        \"contact_name\": \"John Doe\",\n        \"contact_email\": \"john@awesome.com\",\n        \"contact_phone\": \"1234567890\",\n        \"address\": \"123 Main St\"\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Partner",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/partners/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "partners",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "PARTNER_ID_HERE"
+                }
+              ]
+            },
+            "description": "Retrieves details of a specific partner by ID."
+          },
+          "response": []
+        },
+        {
+          "name": "Update Partner",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"contact_phone\": \"9876543210\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/partners/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "partners",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "PARTNER_ID_HERE"
+                }
+              ]
+            },
+            "description": "Updates an existing partner.\n**Body Format:** JSON\n- `type` (string, optional): Allowed values: `seller`, `buyer`, `supplier`.\n- `name` (string, optional): The partner's company or primary name.\n- `contact_name` (string, optional): Name of the contact person.\n- `contact_email` (string, optional): Valid email address.\n- `contact_phone` (string, optional): Phone number.\n- `address` (string, optional): Physical address."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Partner",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/partners/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "partners",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "PARTNER_ID_HERE"
+                }
+              ]
+            },
+            "description": "Deletes a partner from the system."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Products",
+      "item": [
+        {
+          "name": "List Products",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/products",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "products"
+              ]
+            },
+            "description": "Retrieves a paginated list of all products.\n**Query Parameters:**\n- `category_id` (UUID string, optional): Filter products by a specific category.\n- `search` (string, optional): Search for products matching the query in their `name`, `description`, or `sku`."
+          },
+          "response": []
+        },
+        {
+          "name": "Create Product",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"New Laptop\",\n    \"sku\": \"LAP-001\",\n    \"description\": \"Gaming Laptop\",\n    \"category_id\": \"CATEGORY_ID_HERE\",\n    \"quantity\": 0\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/products",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "products"
+              ]
+            },
+            "description": "Creates a new product.\n**Body Format:** multipart/form-data\n- `name` (string, required): Name of the product.\n- `sku` (string, required): Unique Stock Keeping Unit identifier.\n- `description` (string, optional): Detailed description.\n- `category_id` (UUID string, required): ID of the parent category.\n- `images[]` (array of files, optional): One or more image files (jpeg, png, jpg, gif, max 2MB each)."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Product",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/products/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "products",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "PRODUCT_ID_HERE"
+                }
+              ]
+            },
+            "description": "Retrieves details of a specific product by ID, including its category and images."
+          },
+          "response": []
+        },
+        {
+          "name": "Update Product",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"description\": \"Updated description\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/products/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "products",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "PRODUCT_ID_HERE"
+                }
+              ]
+            },
+            "description": "Updates an existing product. Since file uploads via PUT can be tricky in some clients, you can use POST with `_method=PUT` if uploading files.\n**Body Format:** multipart/form-data\n- `name` (string, required): Name of the product.\n- `sku` (string, required): Unique Stock Keeping Unit identifier.\n- `description` (string, optional): Detailed description.\n- `category_id` (UUID string, required): ID of the parent category.\n- `images[]` (array of files, optional): Additional image files to attach to the product.\n- `deleted_images[]` (array of UUID strings, optional): IDs of existing images that should be deleted from the product."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Product",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/products/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "products",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "PRODUCT_ID_HERE"
+                }
+              ]
+            },
+            "description": "Deletes a product and all its associated images."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Movement Orders",
+      "item": [
+        {
+          "name": "List Movement Orders",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/movement-orders",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "movement-orders"
+              ]
+            },
+            "description": "Retrieves a paginated list of movement orders.\n**Query Parameters:**\n- `supplier_id` (UUID string, optional): Filter orders associated with a specific supplier.\n- `date_from` (date string YYYY-MM-DD, optional): Filter orders created on or after this date.\n- `date_to` (date string YYYY-MM-DD, optional): Filter orders created on or before this date."
+          },
+          "response": []
+        },
+        {
+          "name": "Create Movement Order (Purchase)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"movement_type_id\": \"TYPE_IN_ID_HERE\",\n    \"supplier_id\": \"PARTNER_SUPPLIER_ID_HERE\",\n    \"reason_id\": \"REASON_ID_HERE\",\n    \"notes\": \"Purchased new stock\",\n    \"items\": [\n        {\n            \"product_id\": \"PRODUCT_ID_HERE\",\n            \"quantity\": 50,\n            \"unit_price\": 100\n        }\n    ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/movement-orders",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "movement-orders"
+              ]
+            },
+            "description": "Creates a movement order representing a purchase (stock IN) from a supplier.\n**Body Format:** JSON\n- `movement_type_id` (UUID string, required): ID of an 'In' movement type.\n- `supplier_id` (UUID string, optional): ID of the supplier partner.\n- `buyer_id` (UUID string, optional): ID of the internal buyer (if applicable).\n- `seller_id` (UUID string, optional): ID of the external seller (if applicable).\n- `reason_id` (UUID string, optional): ID of the reason for movement.\n- `notes` (string, optional): General notes.\n- `items` (array of objects, required): The products moving in this order.\n  - `items[].product_id` (UUID string, required): ID of the product.\n  - `items[].quantity` (integer, required): Amount moving (min 1).\n  - `items[].unit_price` (numeric, required): Price per unit (min 0)."
+          },
+          "response": []
+        },
+        {
+          "name": "Create Movement Order (Sale)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"movement_type_id\": \"TYPE_OUT_ID_HERE\",\n    \"buyer_id\": \"PARTNER_BUYER_ID_HERE\",\n    \"seller_id\": \"PARTNER_SELLER_ID_HERE\",\n    \"reason_id\": \"REASON_ID_HERE\",\n    \"notes\": \"Sold stock to buyer\",\n    \"items\": [\n        {\n            \"product_id\": \"PRODUCT_ID_HERE\",\n            \"quantity\": 2,\n            \"unit_price\": 150\n        }\n    ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/movement-orders",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "movement-orders"
+              ]
+            },
+            "description": "Creates a movement order representing a sale (stock OUT) to a buyer.\n**Body Format:** JSON\n- `movement_type_id` (UUID string, required): ID of an 'Out' movement type.\n- `buyer_id` (UUID string, optional): ID of the external buyer partner.\n- `seller_id` (UUID string, optional): ID of the internal seller (if applicable).\n- `reason_id` (UUID string, optional): ID of the reason for movement.\n- `notes` (string, optional): General notes.\n- `items` (array of objects, required): The products moving in this order.\n  - `items[].product_id` (UUID string, required): ID of the product.\n  - `items[].quantity` (integer, required): Amount moving (min 1).\n  - `items[].unit_price` (numeric, required): Price per unit (min 0)."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Movement Order",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/movement-orders/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "movement-orders",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "ORDER_ID_HERE"
+                }
+              ]
+            },
+            "description": "Retrieves details of a specific movement order by ID."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Reports",
+      "item": [
+        {
+          "name": "Top Products",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/reports/top-products",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "reports",
+                "top-products"
+              ]
+            },
+            "description": "Retrieves the top-selling products."
+          },
+          "response": []
+        },
+        {
+          "name": "Top Categories",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/reports/top-categories",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "reports",
+                "top-categories"
+              ]
+            },
+            "description": "Retrieves the best-performing categories."
+          },
+          "response": []
+        },
+        {
+          "name": "Total Revenue",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/reports/revenue",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "reports",
+                "revenue"
+              ]
+            },
+            "description": "Calculates the total revenue from sales."
+          },
+          "response": []
+        },
+        {
+          "name": "Per Supplier Report",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/reports/per-supplier",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "reports",
+                "per-supplier"
+              ]
+            },
+            "description": "Generates a report of purchases grouped by supplier."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Reasons",
+      "item": [
+        {
+          "name": "List Reasons",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/reasons",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "reasons"
+              ]
+            },
+            "description": "Retrieves a list of all reasons used for movement orders."
+          },
+          "response": []
+        },
+        {
+          "name": "Create Reason",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Damaged\",\n    \"description\": \"Stock was damaged\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/reasons",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "reasons"
+              ]
+            },
+            "description": "Creates a new reason (e.g., Damaged, Expired, Adjusted).\n**Body Format:** JSON\n- `name` (string, required): Unique reason name.\n- `description` (string, optional): Additional context about the reason."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Reason",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/reasons/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "reasons",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "REASON_ID_HERE"
+                }
+              ]
+            },
+            "description": "Retrieves details of a specific reason by ID."
+          },
+          "response": []
+        },
+        {
+          "name": "Update Reason",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Expired\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/reasons/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "reasons",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "REASON_ID_HERE"
+                }
+              ]
+            },
+            "description": "Updates an existing reason.\n**Body Format:** JSON\n- `name` (string, required): Unique reason name.\n- `description` (string, optional): Additional context about the reason."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Reason",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/reasons/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "reasons",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "REASON_ID_HERE"
+                }
+              ]
+            },
+            "description": "Deletes a reason from the system."
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "2|bQTqWaRjkig8ZBfsX4yt0bwNdKuOvHr4JZNtEimy7a92e15f",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000/api"
+    },
+    {
+      "key": "token",
+      "value": ""
+    }
+  ]
+}

@@ -2,12 +2,12 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CategoryController;
-use App\Http\Controllers\Api\LocationController;
 use App\Http\Controllers\Api\MovementOrderController;
+use App\Http\Controllers\Api\PartnerController;
 use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\ProfileController;
+use App\Http\Controllers\Api\ReasonController;
 use App\Http\Controllers\Api\ReportController;
-use App\Http\Controllers\Api\SupplierController;
-use App\Http\Controllers\Api\WarehouseController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,32 +16,30 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 */
 
-Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
-    Route::get('/profile', [AuthController::class, 'profile']);
+    Route::get('/profile', [ProfileController::class, 'show']);
+    Route::patch('/profile', [ProfileController::class, 'update']);
+    Route::delete('/profile/delete-avatar', [ProfileController::class, 'deleteAvatar']);
 
     // Admin Only Routes
-    Route::middleware('role:admin')->group(function () {
-        Route::apiResource('categories', CategoryController::class);
-        Route::apiResource('locations', LocationController::class);
-        Route::apiResource('warehouses', WarehouseController::class);
-        Route::apiResource('suppliers', SupplierController::class);
-        
-        // Product Management (Full CRUD)
-        Route::post('/products', [ProductController::class, 'store']);
-        Route::put('/products/{product}', [ProductController::class, 'update']);
-        Route::delete('/products/{product}', [ProductController::class, 'destroy']);
+    Route::apiResource('categories', CategoryController::class);
+    Route::apiResource('partners', PartnerController::class);
+    Route::apiResource('reasons', ReasonController::class);
 
-        // Reports
-        Route::prefix('reports')->group(function () {
-            Route::get('/top-products', [ReportController::class, 'topProducts']);
-            Route::get('/top-categories', [ReportController::class, 'topCategories']);
-            Route::get('/revenue-per-warehouse', [ReportController::class, 'revenuePerWarehouse']);
-            Route::get('/per-supplier', [ReportController::class, 'perSupplier']);
-        });
+    // Product Management (Full CRUD)
+    Route::post('/products', [ProductController::class, 'store']);
+    Route::put('/products/{product}', [ProductController::class, 'update']);
+    Route::delete('/products/{product}', [ProductController::class, 'destroy']);
+
+    // Reports
+    Route::prefix('reports')->group(function () {
+        Route::get('/top-products', [ReportController::class, 'topProducts']);
+        Route::get('/top-categories', [ReportController::class, 'topCategories']);
+        Route::get('/revenue', [ReportController::class, 'revenue']);
+        Route::get('/per-supplier', [ReportController::class, 'perSupplier']);
     });
 
     // Shared Routes (Admin & Seller)

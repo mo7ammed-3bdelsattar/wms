@@ -10,9 +10,12 @@ use App\Services\MovementService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Traits\ApiResponse;
 
 class MovementOrderController extends Controller
 {
+    use ApiResponse;
+
     protected $movementService;
 
     public function __construct(MovementService $movementService)
@@ -22,11 +25,7 @@ class MovementOrderController extends Controller
 
     public function index(Request $request): JsonResponse
     {
-        $query = MovementOrder::with(['items.product', 'seller', 'buyer', 'supplier', 'warehouse', 'toWarehouse', 'movementType', 'reason']);
-
-        if ($request->has('warehouse_id')) {
-            $query->where('warehouse_id', $request->warehouse_id);
-        }
+        $query = MovementOrder::with(['items.product', 'seller', 'buyer', 'supplier', 'movementType', 'reason']);
 
         if ($request->has('supplier_id')) {
             $query->where('supplier_id', $request->supplier_id);
@@ -41,7 +40,7 @@ class MovementOrderController extends Controller
         }
 
         $orders = $query->paginate(15);
-        return $this->sendResponse(MovementOrderResource::collection($orders)->response()->getData(true), 'Movement orders retrieved successfully.');
+        return $this->successResponse(MovementOrderResource::collection($orders)->response()->getData(true), 'Movement orders retrieved successfully.');
     }
 
     public function store(MovementOrderRequest $request): JsonResponse
@@ -59,14 +58,18 @@ class MovementOrderController extends Controller
                 return $order;
             });
 
-            return $this->sendResponse(new MovementOrderResource($order->load(['items.product', 'seller', 'buyer', 'supplier', 'warehouse', 'toWarehouse', 'movementType', 'reason'])), 'Movement order processed successfully.', 201);
+            return $this->createdResponse(new MovementOrderResource($order->load(['items.product', 'seller', 'buyer', 'supplier', 'movementType', 'reason'])), 'Movement order processed successfully.');
         } catch (\Exception $e) {
-            return $this->sendError('Movement processing failed.', ['error' => $e->getMessage()], 422);
+            return $this->errorResponse('Movement processing failed. ' . $e->getMessage(), 422);
         }
     }
 
-    public function show(MovementOrder $movementOrder): JsonResponse
+    public function show(string $id): JsonResponse
     {
-        return $this->sendResponse(new MovementOrderResource($movementOrder->load(['items.product', 'seller', 'buyer', 'supplier', 'warehouse', 'toWarehouse', 'movementType', 'reason'])), 'Movement order retrieved successfully.');
+        $movementOrder = MovementOrder::find($id);
+        if (!$movementOrder) {
+            return $this->errorResponse('Movement order not found.', 404);
+        }
+        return $this->successResponse(new MovementOrderResource($movementOrder->load(['items.product', 'seller', 'buyer', 'supplier', 'movementType', 'reason'])), 'Movement order retrieved successfully.');
     }
 }

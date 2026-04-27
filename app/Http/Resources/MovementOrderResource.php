@@ -11,17 +11,13 @@ class MovementOrderResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'movement_type' => $this->movement_type,
-            'reason' => $this->reason,
             'notes' => $this->notes,
-            'seller' => new UserResource($this->whenLoaded('seller')),
-            'buyer' => new UserResource($this->whenLoaded('buyer')),
-            'supplier' => new SupplierResource($this->whenLoaded('supplier')),
-            'warehouse' => new WarehouseResource($this->whenLoaded('warehouse')),
-            'to_warehouse' => new WarehouseResource($this->whenLoaded('toWarehouse')),
+            'seller' => new PartnerResource($this->whenLoaded('seller')),
+            'buyer' => new PartnerResource($this->whenLoaded('buyer')),
+            'supplier' => new PartnerResource($this->whenLoaded('supplier')),
+            'movement_type' => new MovementTypeResource($this->whenLoaded('movementType')),
+            'reason' => new ReasonResource($this->whenLoaded('reason')),
             'items' => MovementOrderItemResource::collection($this->whenLoaded('items')),
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
         ];
     }
 }

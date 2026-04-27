@@ -17,6 +17,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->string('sku')->unique();
             $table->foreignUuid('category_id')->nullable()->constrained('categories')->onDelete('set null');
+            $table->integer('quantity')->default(0);
             $table->timestamps();
         });
     }

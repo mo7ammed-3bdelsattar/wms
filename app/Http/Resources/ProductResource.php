@@ -15,9 +15,8 @@ class ProductResource extends JsonResource
             'description' => $this->description,
             'sku' => $this->sku,
             'category' => new CategoryResource($this->whenLoaded('category')),
-            'warehouses' => WarehouseResource::collection($this->whenLoaded('warehouses')),
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'quantity' => $this->quantity,
+            'images' => ImageResource::collection($this->whenLoaded('images')),
         ];
     }
 }

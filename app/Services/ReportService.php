@@ -14,8 +14,8 @@ class ReportService
 {
     public function getTopProducts($limit = 10)
     {
-        return MovementOrderItem::select('product_id', DB::raw('SUM(quantity) as total_quantity'))
-            ->with('product:id,name')
+        return MovementOrderItem::with('product:id,name')
+            ->select('product_id', DB::raw('SUM(quantity) as total_quantity'))
             ->groupBy('product_id')
             ->orderByDesc('total_quantity')
             ->limit($limit)
@@ -34,29 +34,28 @@ class ReportService
             ->get();
     }
 
-    public function getRevenuePerWarehouse()
+    public function getTotalRevenue()
     {
-        // Revenue calculated from 'sale' movement types
+        // Revenue calculated from 'sale' or 'out' movement types
         return DB::table('movement_orders')
             ->join('movement_types', 'movement_orders.movement_type_id', '=', 'movement_types.id')
             ->join('movement_order_items', 'movement_orders.id', '=', 'movement_order_items.movement_order_id')
-            ->join('warehouses', 'movement_orders.warehouse_id', '=', 'warehouses.id')
-            ->where('movement_types.slug', 'sale')
-            ->select('warehouses.name', DB::raw('SUM(movement_order_items.quantity * movement_order_items.unit_price) as total_revenue'))
-            ->groupBy('warehouses.id', 'warehouses.name')
+            ->whereIn('movement_types.slug', ['sale', 'out'])
+            ->select(DB::raw('SUM(movement_order_items.quantity * movement_order_items.unit_price) as total_revenue'))
             ->get();
     }
 
     public function getPerSupplierReport()
     {
         return DB::table('movement_orders')
-            ->join('suppliers', 'movement_orders.supplier_id', '=', 'suppliers.id')
+            ->join('partners', 'movement_orders.supplier_id', '=', 'partners.id')
             ->join('movement_order_items', 'movement_orders.id', '=', 'movement_order_items.movement_order_id')
-            ->select('suppliers.name', 
+            ->where('partners.type', 'supplier')
+            ->select('partners.name', 
                 DB::raw('COUNT(DISTINCT movement_orders.id) as orders_count'),
                 DB::raw('SUM(movement_order_items.quantity * movement_order_items.unit_price) as total_purchases')
             )
-            ->groupBy('suppliers.id', 'suppliers.name')
+            ->groupBy('partners.id', 'partners.name')
             ->get();
     }
 }

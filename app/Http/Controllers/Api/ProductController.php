@@ -8,47 +8,75 @@ use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use App\Traits\ApiResponse;
+use App\Traits\ImageUploadTrait;
 
 class ProductController extends Controller
 {
+    use ApiResponse, ImageUploadTrait;
+
     public function index(Request $request): JsonResponse
     {
-        $query = Product::with(['category', 'warehouses']);
-
-        if ($request->has('category_id')) {
-            $query->where('category_id', $request->category_id);
-        }
-
-        if ($request->has('warehouse_id')) {
-            $query->whereHas('warehouses', function ($q) use ($request) {
-                $q->where('warehouses.id', $request->warehouse_id);
-            });
-        }
+        $query = Product::filter()->with(['category', 'images']);
 
         $products = $query->paginate(15);
-        return $this->sendResponse(ProductResource::collection($products)->response()->getData(true), 'Products retrieved successfully.');
+        return $this->successResponse($this->resourceCollection($products, ProductResource::class), 'Products retrieved successfully.');
     }
 
     public function store(ProductRequest $request): JsonResponse
     {
         $product = Product::create($request->validated());
-        return $this->sendResponse(new ProductResource($product), 'Product created successfully.', 201);
+        
+        if ($request->hasFile('images')) {
+            $this->uploadMultipleImages($request->file('images'), $product, 'products');
+        }
+
+        return $this->createdResponse(new ProductResource($product->load('images')), 'Product created successfully.');
     }
 
-    public function show(Product $product): JsonResponse
+    public function show(string $id): JsonResponse
     {
-        return $this->sendResponse(new ProductResource($product->load(['category', 'warehouses'])), 'Product retrieved successfully.');
+        $product = Product::find($id);
+        if (!$product) {
+            return $this->errorResponse('Product not found.', 404);
+        }
+        return $this->successResponse(new ProductResource($product->load(['category', 'images'])), 'Product retrieved successfully.');
     }
 
-    public function update(ProductRequest $request, Product $product): JsonResponse
+    public function update(ProductRequest $request, string $id): JsonResponse
     {
+        $product = Product::find($id);
+        if (!$product) {
+            return $this->errorResponse('Product not found.', 404);
+        }
         $product->update($request->validated());
-        return $this->sendResponse(new ProductResource($product), 'Product updated successfully.');
+
+        if ($request->hasFile('images')) {
+            $this->uploadMultipleImages($request->file('images'), $product, 'products');
+        }
+
+        if ($request->has('deleted_images')) {
+            foreach ($request->deleted_images as $imageId) {
+                $image = $product->images()->find($imageId);
+                if ($image) {
+                    $this->deleteImage($image);
+                }
+            }
+        }
+
+        return $this->successResponse(new ProductResource($product->fresh(['images'])), 'Product updated successfully.');
     }
 
-    public function destroy(Product $product): JsonResponse
+    public function destroy(string $id): JsonResponse
     {
+        $product = Product::find($id);
+        if (!$product) {
+            return $this->errorResponse('Product not found.', 404);
+        }
+        foreach ($product->images as $image) {
+            $this->deleteImage($image);
+        }
         $product->delete();
-        return $this->sendResponse([], 'Product deleted successfully.');
+        return $this->successResponse(null, 'Product deleted successfully.');
     }
 }

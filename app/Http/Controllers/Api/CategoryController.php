@@ -3,58 +3,65 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CategoryRequest;
 use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use App\Traits\ApiResponse;
+use App\Traits\ImageUploadTrait;
 
 class CategoryController extends Controller
 {
+    use ApiResponse, ImageUploadTrait;
+
     public function index(): JsonResponse
     {
-        $categories = Category::withCount('products')->get();
-        return $this->sendResponse(CategoryResource::collection($categories), 'Categories retrieved successfully.');
+        $categories = Category::withCount('products')->with('image')->get();
+        return $this->successResponse(CategoryResource::collection($categories), 'Categories retrieved successfully.');
     }
 
-    public function store(Request $request): JsonResponse
+    public function store(CategoryRequest $request): JsonResponse
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255|unique:categories',
-            'description' => 'nullable|string',
-        ]);
+        $category = Category::create($request->validated());
 
-        if ($validator->fails()) {
-            return $this->sendError('Validation Error.', $validator->errors(), 422);
+        if ($request->hasFile('image')) {
+            $this->uploadSingleImage($request->file('image'), $category, 'categories');
         }
 
-        $category = Category::create($request->all());
-        return $this->sendResponse(new CategoryResource($category), 'Category created successfully.', 201);
+        return $this->createdResponse(new CategoryResource($category->load('image')), 'Category created successfully.');
     }
 
-    public function show(Category $category): JsonResponse
+    public function show(string $id): JsonResponse
     {
-        return $this->sendResponse(new CategoryResource($category->loadCount('products')), 'Category retrieved successfully.');
+        $category = Category::find($id);
+        if (!$category) {
+            return $this->errorResponse('Category not found.', 404);
+        }
+        return $this->successResponse(new CategoryResource($category->loadCount('products')->load('image')), 'Category retrieved successfully.');
     }
 
-    public function update(Request $request, Category $category): JsonResponse
+    public function update(CategoryRequest $request, Category $category): JsonResponse
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255|unique:categories,name,' . $category->id,
-            'description' => 'nullable|string',
-        ]);
+        $category->update($request->validated());
 
-        if ($validator->fails()) {
-            return $this->sendError('Validation Error.', $validator->errors(), 422);
+        if ($request->hasFile('image')) {
+            $this->uploadSingleImage($request->file('image'), $category, 'categories');
+        } elseif ($request->boolean('delete_image')) {
+            $this->deleteImage($category->image);
         }
 
-        $category->update($request->all());
-        return $this->sendResponse(new CategoryResource($category), 'Category updated successfully.');
+        return $this->successResponse(new CategoryResource($category->fresh('image')), 'Category updated successfully.');
     }
 
-    public function destroy(Category $category): JsonResponse
+    public function destroy(string $id): JsonResponse
     {
+        $category = Category::find($id);
+        if (!$category) {
+            return $this->errorResponse('Category not found.', 404);
+        }
+        $this->deleteImage($category->image);
         $category->delete();
-        return $this->sendResponse([], 'Category deleted successfully.');
+        return $this->successResponse(null, 'Category deleted successfully.');
     }
 }

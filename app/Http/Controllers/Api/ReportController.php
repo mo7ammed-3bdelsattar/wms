@@ -5,9 +5,12 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Services\ReportService;
 use Illuminate\Http\JsonResponse;
+use App\Traits\ApiResponse;
 
 class ReportController extends Controller
 {
+    use ApiResponse;
+
     protected $reportService;
 
     public function __construct(ReportService $reportService)
@@ -17,21 +20,21 @@ class ReportController extends Controller
 
     public function topProducts(): JsonResponse
     {
-        return $this->sendResponse($this->reportService->getTopProducts(), 'Top products report retrieved successfully.');
+        return $this->successResponse($this->reportService->getTopProducts(), 'Top products report retrieved successfully.');
     }
 
     public function topCategories(): JsonResponse
     {
-        return $this->sendResponse($this->reportService->getTopCategories(), 'Top categories report retrieved successfully.');
+        return $this->successResponse($this->reportService->getTopCategories(), 'Top categories report retrieved successfully.');
     }
 
-    public function revenuePerWarehouse(): JsonResponse
+    public function revenue(): JsonResponse
     {
-        return $this->sendResponse($this->reportService->getRevenuePerWarehouse(), 'Revenue per warehouse report retrieved successfully.');
+        return $this->successResponse($this->reportService->getTotalRevenue(), 'Total revenue report retrieved successfully.');
     }
 
     public function perSupplier(): JsonResponse
     {
-        return $this->sendResponse($this->reportService->getPerSupplierReport(), 'Per supplier report retrieved successfully.');
+        return $this->successResponse($this->reportService->getPerSupplierReport(), 'Per supplier report retrieved successfully.');
     }
 }
