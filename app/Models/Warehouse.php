@@ -2,36 +2,25 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class Warehouse extends Model
 {
-    use HasUuids;
+    use HasFactory, HasUuids;
 
-    protected $fillable = [
-        'name',
-        'address',
-        'location_id',
-    ];
+    protected $fillable = ['name', 'location_id'];
 
-    public function location(): BelongsTo
+    public function location()
     {
         return $this->belongsTo(Location::class);
     }
 
-    public function products(): BelongsToMany
+    public function products()
     {
         return $this->belongsToMany(Product::class, 'product_warehouses')
-                    ->withPivot('quantity')
-                    ->withTimestamps();
-    }
-
-    public function movementOrders(): HasMany
-    {
-        return $this->hasMany(MovementOrder::class);
+            ->withPivot('quantity', 'id')
+            ->withTimestamps();
     }
 }

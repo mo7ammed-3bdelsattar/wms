@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class MovementOrderItem extends Model
 {
-    use HasUuids;
+    use HasFactory, HasUuids;
 
     protected $fillable = [
         'movement_order_id',
@@ -17,12 +17,12 @@ class MovementOrderItem extends Model
         'unit_price',
     ];
 
-    public function order(): BelongsTo
+    public function movementOrder()
     {
-        return $this->belongsTo(MovementOrder::class, 'movement_order_id');
+        return $this->belongsTo(MovementOrder::class);
     }
 
-    public function product(): BelongsTo
+    public function product()
     {
         return $this->belongsTo(Product::class);
     }

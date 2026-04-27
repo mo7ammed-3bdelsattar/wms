@@ -2,29 +2,17 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class ProductWarehouse extends Model
+class ProductWarehouse extends Pivot
 {
-    use HasUuids;
+    use HasFactory, HasUuids;
 
     protected $table = 'product_warehouses';
 
-    protected $fillable = [
-        'product_id',
-        'warehouse_id',
-        'quantity',
-    ];
+    public $incrementing = false;
 
-    public function product(): BelongsTo
-    {
-        return $this->belongsTo(Product::class);
-    }
-
-    public function warehouse(): BelongsTo
-    {
-        return $this->belongsTo(Warehouse::class);
-    }
+    protected $fillable = ['product_id', 'warehouse_id', 'quantity'];
 }

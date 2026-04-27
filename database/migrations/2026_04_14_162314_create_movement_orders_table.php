@@ -15,11 +15,12 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->foreignUuid('seller_id')->nullable()->constrained('users')->onDelete('set null');
             $table->foreignUuid('buyer_id')->nullable()->constrained('users')->onDelete('set null');
-            $table->string('movement_type'); // e.g., 'IN', 'OUT', 'TRANSFER'
-            $table->string('reason')->nullable();
+            $table->foreignUuid('supplier_id')->nullable()->constrained('suppliers')->onDelete('set null');
+            $table->foreignUuid('warehouse_id')->nullable()->constrained('warehouses')->onDelete('cascade');
+            $table->foreignUuid('to_warehouse_id')->nullable()->constrained('warehouses')->onDelete('cascade');
+            $table->foreignUuid('movement_type_id')->constrained('movement_types');
+            $table->foreignUuid('reason_id')->nullable()->constrained('reasons');
             $table->text('notes')->nullable();
-            $table->foreignUuid('party_id')->nullable()->constrained('parties')->onDelete('set null');
-            $table->foreignUuid('warehouse_id')->constrained('warehouses')->onDelete('cascade');
             $table->timestamps();
         });
     }
